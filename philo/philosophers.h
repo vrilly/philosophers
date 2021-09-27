@@ -18,6 +18,7 @@ typedef struct s_args
 typedef struct s_philosopher
 {
 	int				philosopher_number;
+	struct timeval	*start_time;
 	struct timeval	s_last_feeding;
 	pthread_t		thread;
 	t_args			*args;

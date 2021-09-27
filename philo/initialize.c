@@ -19,6 +19,15 @@ void	spawn_chopsticks(t_philosophers *philosophers)
 	}
 }
 
+static void	swap_chopsticks(t_philosopher *philo)
+{
+	pthread_mutex_t	*cs;
+
+	cs = philo->cs_left;
+	philo->cs_left = philo->cs_right;
+	philo->cs_right = cs;
+}
+
 static void
 	philo_setdata(t_philosopher *philo, t_philosophers *philosophers,
 	int i, pthread_mutex_t **chopstick)
@@ -26,11 +35,14 @@ static void
 	philo->philosopher_number = i + 1;
 	philo->args = &philosophers->args;
 	philo->s_last_feeding = philosophers->start_time;
+	philo->start_time = &philosophers->start_time;
 	philo->cs_left = *chopstick;
 	if (i < philosophers->args.num_of_philosophers - 1)
 		philo->cs_right = *(chopstick + 1);
 	else
 		philo->cs_right = *philosophers->chopsticks;
+	if (i % 2)
+		swap_chopsticks(philo);
 }
 
 void	spawn_philosophers(t_philosophers *philosophers)
