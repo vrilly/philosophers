@@ -7,13 +7,13 @@ OBJS	:= $(SRCS:.c=.o)
 OBJ_DIR	 = build
 
 $(OBJ_DIR)/%.o : %.c | $(OBJ_DIR)
-	@echo -e 'Compiling: \t' $<
+	@echo "Compiling: \t" $<
 	@$(CC) $(CFLAGS) -c -o $@ $<
 
 all: $(NAME)
 
 $(NAME): $(addprefix $(OBJ_DIR)/, $(OBJS))
-	@echo -e 'Linking \t' $(NAME)
+	@echo "Linking \t" $(NAME)
 	@$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 	@echo ---DONE---
 
@@ -26,9 +26,9 @@ fclean: clean
 re: fclean all
 
 $(OBJ_DIR):
-	@echo -e 'Build target: \t' $(NAME)
-	@echo -e 'Host: \t\t' $$(uname -rms)
-	@echo -e 'CFLAGS: \t' $(CFLAGS)
-	@echo -e 'LDFLAGS: \t' $(LDFLAGS)
+	@echo "Build target: \t" $(NAME)
+	@echo "Host: \t\t" $$(uname -rms)
+	@echo "CFLAGS: \t" $(CFLAGS)
+	@echo "LDFLAGS: \t" $(LDFLAGS)
 	@echo ---Start---
 	@mkdir -p $(OBJ_DIR)
