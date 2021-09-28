@@ -8,30 +8,43 @@ static int	get_timestamp(t_philosopher *data)
 	return (ms_between_timestamps(data->start_time, &tv));
 }
 
-static void	p_eat(t_philosopher *data)
+static int	p_eat(t_philosopher *data)
 {
-	pthread_mutex_lock(data->cs_left->mutex);
-	printf("[%d] %d has taken a fork\n", get_timestamp(data),
-		data->philosopher_number);
-	pthread_mutex_lock(data->cs_right->mutex);
+	struct timeval	tv;
+
+	while (try_lock_cs(data))
+	{
+		usleep(5 * 1000 + (50 * data->philosopher_number));
+		gettimeofday(&tv, NULL);
+		if (data->args->time_to_die <
+			ms_between_timestamps(&data->s_last_feeding, &tv))
+			return (0);
+	}
 	printf("[%d] %d has taken a fork\n", get_timestamp(data),
 		data->philosopher_number);
 	printf("[%d] %d is eating\n", get_timestamp(data),
 		data->philosopher_number);
-	gettimeofday(&data->s_last_feeding, NULL);
 	usleep(1000 * data->args->time_to_eat);
-	pthread_mutex_unlock(data->cs_left->mutex);
-	pthread_mutex_unlock(data->cs_right->mutex);
+	gettimeofday(&data->s_last_feeding, NULL);
+	unlock_cs(data);
+	return (1);
 }
 
 void	*philosopher(t_philosopher *data)
 {
+	struct timeval	tv;
+
 	while (1)
 	{
-		p_eat(data);
+		if (!p_eat(data))
+			break ;
 		printf("[%d] %d is sleeping\n", get_timestamp(data),
 			data->philosopher_number);
 		usleep(data->args->time_to_sleep * 1000);
+		gettimeofday(&tv, NULL);
+		if (data->args->time_to_die <
+			ms_between_timestamps(&data->s_last_feeding, &tv))
+			break ;
 		printf("[%d] %d is thinking\n", get_timestamp(data),
 			data->philosopher_number);
 	}
