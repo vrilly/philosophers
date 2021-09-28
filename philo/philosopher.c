@@ -10,18 +10,18 @@ static int	get_timestamp(t_philosopher *data)
 
 static void	p_eat(t_philosopher *data)
 {
-	pthread_mutex_lock(data->cs_left);
+	pthread_mutex_lock(data->cs_left->mutex);
 	printf("[%d] %d has taken a fork\n", get_timestamp(data),
 		data->philosopher_number);
-	pthread_mutex_lock(data->cs_right);
+	pthread_mutex_lock(data->cs_right->mutex);
 	printf("[%d] %d has taken a fork\n", get_timestamp(data),
 		data->philosopher_number);
 	printf("[%d] %d is eating\n", get_timestamp(data),
 		data->philosopher_number);
 	gettimeofday(&data->s_last_feeding, NULL);
 	usleep(1000 * data->args->time_to_eat);
-	pthread_mutex_unlock(data->cs_left);
-	pthread_mutex_unlock(data->cs_right);
+	pthread_mutex_unlock(data->cs_left->mutex);
+	pthread_mutex_unlock(data->cs_right->mutex);
 }
 
 void	*philosopher(t_philosopher *data)

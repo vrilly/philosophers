@@ -1,27 +1,32 @@
 #include "philosophers.h"
 
+static void	init_chopstick_mutex(t_chopstick *chopstick)
+{
+	chopstick->reserved = 0;
+	chopstick->mutex = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(chopstick->mutex, NULL);
+}
+
 void	spawn_chopsticks(t_philosophers *philosophers)
 {
 	int				i;
-	int				r;
-	pthread_mutex_t	**ptr;
+	t_chopstick		**ptr;
 
 	philosophers->chopsticks = malloc(
-			sizeof(pthread_mutex_t *) * philosophers->args.num_of_philosophers);
+			sizeof(t_chopstick *) * philosophers->args.num_of_philosophers);
 	i = 0;
-	r = 0;
 	while (i < philosophers->args.num_of_philosophers)
 	{
 		ptr = philosophers->chopsticks + i;
-		*ptr = malloc(sizeof(pthread_mutex_t));
-		r += pthread_mutex_init(*ptr, NULL);
+		*ptr = malloc(sizeof(t_chopstick));
+		init_chopstick_mutex(*ptr);
 		i++;
 	}
 }
 
 static void	swap_chopsticks(t_philosopher *philo)
 {
-	pthread_mutex_t	*cs;
+	t_chopstick	*cs;
 
 	cs = philo->cs_left;
 	philo->cs_left = philo->cs_right;
@@ -30,7 +35,7 @@ static void	swap_chopsticks(t_philosopher *philo)
 
 static void
 	philo_setdata(t_philosopher *philo, t_philosophers *philosophers,
-	int i, pthread_mutex_t **chopstick)
+	int i, t_chopstick **chopstick)
 {
 	philo->philosopher_number = i + 1;
 	philo->args = &philosophers->args;
@@ -49,7 +54,7 @@ void	spawn_philosophers(t_philosophers *philosophers)
 {
 	int				i;
 	t_philosopher	**ptr;
-	pthread_mutex_t	**chopstick;
+	t_chopstick		**chopstick;
 
 	philosophers->entities = malloc(
 			sizeof(t_philosopher *) * philosophers->args.num_of_philosophers);
