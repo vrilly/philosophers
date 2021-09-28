@@ -20,6 +20,7 @@ typedef struct s_args
 	int	time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;
+	int	times_to_eat;
 }	t_args;
 
 typedef struct s_chopstick
@@ -54,7 +55,7 @@ typedef struct s_philosophers
 
 typedef void*	(*t_start_routine)(void *);
 
-void	get_args(t_args *args, char *input);
+int		get_args(t_args *args, int argc, char **argv);
 void	spawn_chopsticks(t_philosophers *philosophers);
 void	spawn_philosophers(t_philosophers *philosophers);
 void	*philosopher(t_philosopher *data);
