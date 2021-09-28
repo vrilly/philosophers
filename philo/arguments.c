@@ -49,16 +49,16 @@ int	get_args(t_args *args, int argc, char **argv)
 	int	i;
 
 	i = 0;
-	if (argc < 2 || argc > 6)
-		return (1);
-	if (argc < 3)
+	if (argc < 2)
 		parse_arg(NULL, NULL, "number_of_philosophers");
-	if (argc < 4)
+	if (argc < 3)
 		parse_arg(NULL, NULL, "time_to_die");
-	if (argc < 5)
+	if (argc < 4)
 		parse_arg(NULL, NULL, "time_to_eat");
-	if (argc < 6)
+	if (argc < 5)
 		parse_arg(NULL, NULL, "time_to_sleep");
+	if (argc < 5 || argc > 6)
+		return (1);
 	if (argc == 6)
 		parse_arg(argv[5], &args->times_to_eat,
 			"number_of_times_each_philosopher_must_eat");
