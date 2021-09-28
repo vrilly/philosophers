@@ -19,8 +19,8 @@ int	main(void)
 	t_philosophers	philosophers;
 
 	memset(&philosophers, 0, sizeof(t_philosophers));
-	philosophers.cs_state = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(philosophers.cs_state, NULL);
+	philosophers.state_lock = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(philosophers.state_lock, NULL);
 	gettimeofday(&philosophers.start_time, NULL);
 	get_args(&philosophers.args, NULL);
 	spawn_chopsticks(&philosophers);

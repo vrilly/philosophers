@@ -7,6 +7,13 @@
 # include <pthread.h>
 # include <string.h>
 
+typedef enum e_should_die
+{
+	ALIVE,
+	STARVED,
+	BUDDY_DIED
+}	t_should_die;
+
 typedef struct s_args
 {
 	int	num_of_philosophers;
@@ -27,15 +34,18 @@ typedef struct s_philosopher
 	struct timeval	*start_time;
 	struct timeval	s_last_feeding;
 	pthread_t		thread;
-	t_args			*args;
-	pthread_mutex_t	*cs_state;
 	t_chopstick		*cs_left;
 	t_chopstick		*cs_right;
+
+	t_args			*args;
+	pthread_mutex_t	*state_lock;
+	int				*dead;
 }	t_philosopher;
 
 typedef struct s_philosophers
 {
-	pthread_mutex_t	*cs_state;
+	pthread_mutex_t	*state_lock;
+	int				dead;
 	t_chopstick		**chopsticks;
 	t_philosopher	**entities;
 	t_args			args;

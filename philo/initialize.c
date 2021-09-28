@@ -41,7 +41,8 @@ static void
 	philo->args = &philosophers->args;
 	philo->s_last_feeding = philosophers->start_time;
 	philo->start_time = &philosophers->start_time;
-	philo->cs_state = philosophers->cs_state;
+	philo->state_lock = philosophers->state_lock;
+	philo->dead = &philosophers->dead;
 	philo->cs_left = *chopstick;
 	if (i < philosophers->args.num_of_philosophers - 1)
 		philo->cs_right = *(chopstick + 1);
@@ -68,6 +69,7 @@ void	spawn_philosophers(t_philosophers *philosophers)
 		philo_setdata(*ptr, philosophers, i, chopstick);
 		pthread_create(&(*ptr)->thread, NULL, (t_start_routine)philosopher,
 			*ptr);
+		usleep(250);
 		i++;
 		chopstick++;
 	}
