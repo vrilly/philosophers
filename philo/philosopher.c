@@ -30,6 +30,16 @@ static t_should_die	should_die(t_philosopher *data)
 	return (ALIVE);
 }
 
+static int	check_if_done(t_philosopher *data)
+{
+	if (!data->args->times_to_eat)
+		return (0);
+	data->times_eaten++;
+	if (data->times_eaten >= data->args->times_to_eat)
+		return (1);
+	return (0);
+}
+
 static t_should_die	p_eat(t_philosopher *data)
 {
 	t_should_die die_reason;
@@ -60,6 +70,8 @@ void	*philosopher(t_philosopher *data)
 		die_reason = p_eat(data);
 		if (die_reason || should_die(data))
 			break ;
+		if (check_if_done(data))
+			return (NULL);
 		printf("[%d] %d is sleeping\n", get_timestamp(data),
 			data->philosopher_number);
 		usleep(data->args->time_to_sleep * 1000);

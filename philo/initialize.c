@@ -38,6 +38,7 @@ static void
 	int i, t_chopstick **chopstick)
 {
 	philo->philosopher_number = i + 1;
+	philo->times_eaten = 0;
 	philo->args = &philosophers->args;
 	philo->s_last_feeding = philosophers->start_time;
 	philo->start_time = &philosophers->start_time;

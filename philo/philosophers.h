@@ -32,6 +32,7 @@ typedef struct s_chopstick
 typedef struct s_philosopher
 {
 	int				philosopher_number;
+	int				times_eaten;
 	struct timeval	*start_time;
 	struct timeval	s_last_feeding;
 	pthread_t		thread;
