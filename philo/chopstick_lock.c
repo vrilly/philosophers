@@ -1,23 +1,24 @@
 #include "philosophers.h"
 
-int	try_lock_cs(t_philosopher *data)
+static int	get_timestamp(t_philosopher *data)
 {
-	int	avail;
+	struct timeval	tv;
 
+	gettimeofday(&tv, NULL);
+	return (ms_between_timestamps(data->start_time, &tv));
+}
+
+int	try_lock_cs(t_philosopher *data, t_chopstick *cs)
+{
 	pthread_mutex_lock(data->state_lock);
-	avail = 0;
-	avail += data->cs_left->reserved;
-	avail += data->cs_right->reserved;
-	if (avail)
+	if (cs->reserved)
 	{
 		pthread_mutex_unlock(data->state_lock);
 		return (1);
 	}
-	data->cs_left->reserved = 1;
-	data->cs_right->reserved = 1;
+	cs->reserved = data->philosopher_number;
 	pthread_mutex_unlock(data->state_lock);
-	pthread_mutex_lock(data->cs_left->mutex);
-	pthread_mutex_lock(data->cs_right->mutex);
+	pthread_mutex_lock(cs->mutex);
 	return (0);
 }
 

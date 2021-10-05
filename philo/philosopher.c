@@ -32,9 +32,9 @@ static t_should_die	should_die(t_philosopher *data)
 
 static int	check_if_done(t_philosopher *data)
 {
+	data->times_eaten++;
 	if (!data->args->times_to_eat)
 		return (0);
-	data->times_eaten++;
 	if (data->times_eaten >= data->args->times_to_eat)
 		return (1);
 	return (0);
@@ -42,11 +42,16 @@ static int	check_if_done(t_philosopher *data)
 
 static t_should_die	p_eat(t_philosopher *data)
 {
-	t_should_die die_reason;
+	t_should_die	die_reason;
 
-	while (try_lock_cs(data))
+	while (try_lock_cs(data, data->cs_left))
 	{
-		usleep(5 * 1000 + (50 * data->philosopher_number));
+		die_reason = should_die(data);
+		if (die_reason)
+			return (die_reason);
+	}
+	while (try_lock_cs(data, data->cs_right))
+	{
 		die_reason = should_die(data);
 		if (die_reason)
 			return (die_reason);
@@ -55,8 +60,8 @@ static t_should_die	p_eat(t_philosopher *data)
 		data->philosopher_number);
 	printf("[%d] %d is eating\n", get_timestamp(data),
 		data->philosopher_number);
-	usleep(1000 * data->args->time_to_eat);
 	gettimeofday(&data->s_last_feeding, NULL);
+	usleep(1000 * data->args->time_to_eat);
 	unlock_cs(data);
 	return (0);
 }
@@ -79,6 +84,7 @@ void	*philosopher(t_philosopher *data)
 			break ;
 		printf("[%d] %d is thinking\n", get_timestamp(data),
 			data->philosopher_number);
+		delay(data);
 	}
 	if (die_reason == STARVED)
 		printf("[%d] %d died\n", get_timestamp(data),

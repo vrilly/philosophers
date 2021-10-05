@@ -1,9 +1,9 @@
 NAME	 = philosophers
-CFLAGS	 = -Wall -Wextra -Werror -g
+CFLAGS	 = -Wall -Wextra -g
 LDFLAGS	 = -lpthread
 
 SRCS	 = philosophers.c arguments.c initialize.c philosopher.c timedelta.c \
-			chopstick_lock.c
+			chopstick_lock.c delay.c
 OBJS	:= $(SRCS:.c=.o)
 OBJ_DIR	 = build
 

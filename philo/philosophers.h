@@ -61,7 +61,8 @@ void	spawn_chopsticks(t_philosophers *philosophers);
 void	spawn_philosophers(t_philosophers *philosophers);
 void	*philosopher(t_philosopher *data);
 int		ms_between_timestamps(struct timeval *a, struct timeval *b);
-int		try_lock_cs(t_philosopher *data);
+int		try_lock_cs(t_philosopher *data, t_chopstick *cs);
 void	unlock_cs(t_philosopher *data);
+void	delay(t_philosopher *data);
 
 #endif
