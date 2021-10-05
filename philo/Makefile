@@ -1,5 +1,5 @@
-NAME	 = philosophers
-CFLAGS	 = -Wall -Wextra -g
+NAME	 = philo
+CFLAGS	 = -Wall -Wextra -Werror
 LDFLAGS	 = -lpthread
 
 SRCS	 = philosophers.c arguments.c initialize.c philosopher.c timedelta.c \
@@ -7,7 +7,7 @@ SRCS	 = philosophers.c arguments.c initialize.c philosopher.c timedelta.c \
 OBJS	:= $(SRCS:.c=.o)
 OBJ_DIR	 = build
 
-$(OBJ_DIR)/%.o : %.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o : %.c philosophers.h | $(OBJ_DIR)
 	@echo "Compiling: \t" $<
 	@$(CC) $(CFLAGS) -c -o $@ $<
 

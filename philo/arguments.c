@@ -6,8 +6,8 @@ static int	fatoi(char *str)
 	int		negative;
 
 	result = 0;
-	while ((*str == ' ' || *str == '\t' || *str == '\r' ||
-			*str == '\n' || *str == '\v' || *str == '\f') && *str)
+	while ((*str == ' ' || *str == '\t' || *str == '\r'
+			|| *str == '\n' || *str == '\v' || *str == '\f') && *str)
 		str++;
 	negative = (*str == '-');
 	if (*str == '-' || *str == '+')
@@ -65,7 +65,7 @@ int	get_args(t_args *args, int argc, char **argv)
 	else
 		args->times_to_eat = 0;
 	i += parse_arg(argv[1], &args->num_of_philosophers,
-		"number_of_philosophers");
+			"number_of_philosophers");
 	i += parse_arg(argv[2], &args->time_to_die, "time_to_die");
 	i += parse_arg(argv[3], &args->time_to_eat, "time_to_eat");
 	i += parse_arg(argv[4], &args->time_to_sleep, "time_to_sleep");

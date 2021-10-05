@@ -1,13 +1,5 @@
 #include "philosophers.h"
 
-static int	get_timestamp(t_philosopher *data)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (ms_between_timestamps(data->start_time, &tv));
-}
-
 int	try_lock_cs(t_philosopher *data, t_chopstick *cs)
 {
 	pthread_mutex_lock(data->state_lock);

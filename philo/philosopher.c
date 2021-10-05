@@ -19,8 +19,8 @@ static t_should_die	should_die(t_philosopher *data)
 		pthread_mutex_unlock(data->state_lock);
 		return (BUDDY_DIED);
 	}
-	if (data->args->time_to_die <
-			ms_between_timestamps(&data->s_last_feeding, &tv))
+	if (data->args->time_to_die
+		< ms_between_timestamps(&data->s_last_feeding, &tv))
 	{
 		*data->dead = 1;
 		pthread_mutex_unlock(data->state_lock);
