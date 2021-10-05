@@ -69,5 +69,5 @@ int	get_args(t_args *args, int argc, char **argv)
 	i += parse_arg(argv[2], &args->time_to_die, "time_to_die");
 	i += parse_arg(argv[3], &args->time_to_eat, "time_to_eat");
 	i += parse_arg(argv[4], &args->time_to_sleep, "time_to_sleep");
-	return (0);
+	return (i);
 }
