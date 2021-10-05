@@ -13,8 +13,5 @@ void	delay(t_philosopher *data)
 	if (data->times_eaten > 1)
 		return ;
 	if (data->philosopher_number % 2)
-	{
 		usleep(100);
-		printf("%d delay\n", data->philosopher_number);
-	}
 }
