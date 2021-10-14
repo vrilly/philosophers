@@ -3,7 +3,7 @@ CFLAGS	 = -Wall -Wextra -Werror
 LDFLAGS	 = -lpthread
 
 SRCS	 = philosophers.c arguments.c initialize.c philosopher.c timedelta.c \
-			should_die.c usleep_wrap.c
+			should_die.c usleep_wrap.c printer.c
 OBJS	:= $(SRCS:.c=.o)
 OBJ_DIR	 = build
 

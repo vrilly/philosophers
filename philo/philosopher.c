@@ -1,13 +1,5 @@
 #include "philosophers.h"
 
-static int	get_timestamp(t_philosopher *data)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (ms_between_timestamps(data->start_time, &tv));
-}
-
 static int	check_if_done(t_philosopher *data)
 {
 	data->times_eaten++;
@@ -21,13 +13,10 @@ static int	check_if_done(t_philosopher *data)
 static t_should_die	p_eat(t_philosopher *data)
 {
 	pthread_mutex_lock(data->cs_left->mutex);
-	printf("[%d] %d has taken a fork\n", get_timestamp(data),
-		data->philosopher_number);
+	printer(data, TAKEN_FORK, NULL);
 	pthread_mutex_lock(data->cs_right->mutex);
-	printf("[%d] %d has taken a fork\n", get_timestamp(data),
-		data->philosopher_number);
-	printf("[%d] %d is eating\n", get_timestamp(data),
-		data->philosopher_number);
+	printer(data, TAKEN_FORK, NULL);
+	printer(data, EATING, NULL);
 	gettimeofday(&data->s_last_feeding, NULL);
 	usleep_wrap(data->args->time_to_eat * 1000);
 	pthread_mutex_unlock(data->cs_left->mutex);
@@ -46,16 +35,13 @@ void	*philosopher(t_philosopher *data)
 			break ;
 		if (check_if_done(data))
 			return (NULL);
-		printf("[%d] %d is sleeping\n", get_timestamp(data),
-			data->philosopher_number);
+		printer(data, SLEEPING, NULL);
 		usleep_wrap(data->args->time_to_sleep * 1000);
 		if (should_die_wrap(data, &die_reason))
 			break ;
-		printf("[%d] %d is thinking\n", get_timestamp(data),
-			data->philosopher_number);
+		printer(data, THINKING, NULL);
 	}
 	if (die_reason == STARVED)
-		printf("[%d] %d died\n", get_timestamp(data),
-			data->philosopher_number);
+		printer(data, DIED, NULL);
 	return (NULL);
 }
