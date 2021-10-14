@@ -26,6 +26,7 @@ void	printer(t_philosopher *data, t_printer_msg msg, char *custom_msg)
 		p = custom_msg;
 	else
 		p = (char*)msgs[msg];
-	printf("[%d] %d %s\n", get_timestamp(data), data->philosopher_number, p);
+	if (!(data->globals->dead && msg != DIED))
+		printf("[%d] %d %s\n", get_timestamp(data), data->philosopher_number, p);
 	pthread_mutex_unlock(&data->globals->state_lock);
 }
