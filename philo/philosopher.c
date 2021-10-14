@@ -22,7 +22,10 @@ static int	check_if_done(t_philosopher *data)
 	if (!data->globals->args.times_to_eat)
 		return (0);
 	if (data->times_eaten >= data->globals->args.times_to_eat)
+	{
+		printer(data, DONE, NULL);
 		return (1);
+	}
 	return (0);
 }
 

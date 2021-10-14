@@ -14,7 +14,8 @@ typedef enum e_printer_msg
 	EATING,
 	SLEEPING,
 	THINKING,
-	DIED
+	DIED,
+	DONE
 }	t_printer_msg;
 
 typedef struct s_args
