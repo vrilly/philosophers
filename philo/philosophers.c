@@ -44,7 +44,6 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	pthread_mutex_init(&philosophers.globals.state_lock, NULL);
-	pthread_mutex_init(&philosophers.globals.print_lock, NULL);
 	spawn_chopsticks(&philosophers);
 	spawn_philosophers(&philosophers);
 	join_threads(&philosophers);

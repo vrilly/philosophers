@@ -44,7 +44,6 @@ typedef struct s_global_vars
 	t_args			args;
 	struct timeval	start_time;
 	pthread_mutex_t	state_lock;
-	pthread_mutex_t	print_lock;
 	int				dead;
 }	t_global_vars;
 
