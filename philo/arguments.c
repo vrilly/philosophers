@@ -60,7 +60,7 @@ int	get_args(t_args *args, int argc, char **argv)
 	if (argc < 5 || argc > 6)
 		return (1);
 	if (argc == 6)
-		parse_arg(argv[5], &args->times_to_eat,
+		i += parse_arg(argv[5], &args->times_to_eat,
 			"number_of_times_each_philosopher_must_eat");
 	else
 		args->times_to_eat = 0;
