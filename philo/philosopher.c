@@ -28,6 +28,8 @@ static t_should_die	p_eat(t_philosopher *data)
 		if (die_reason)
 			return (die_reason);
 	}
+	printf("[%d] %d has taken a fork\n", get_timestamp(data),
+		data->philosopher_number);
 	while (try_lock_cs(data, data->cs_right))
 	{
 		die_reason = should_die(data);
@@ -39,7 +41,7 @@ static t_should_die	p_eat(t_philosopher *data)
 	printf("[%d] %d is eating\n", get_timestamp(data),
 		data->philosopher_number);
 	gettimeofday(&data->s_last_feeding, NULL);
-	usleep(1000 * data->args->time_to_eat);
+	usleep_wrap(data->args->time_to_eat * 1000);
 	unlock_cs(data);
 	return (0);
 }
@@ -57,7 +59,7 @@ void	*philosopher(t_philosopher *data)
 			return (NULL);
 		printf("[%d] %d is sleeping\n", get_timestamp(data),
 			data->philosopher_number);
-		usleep(data->args->time_to_sleep * 1000);
+		usleep_wrap(data->args->time_to_sleep * 1000);
 		if (should_die_wrap(data, &die_reason))
 			break ;
 		printf("[%d] %d is thinking\n", get_timestamp(data),

@@ -66,5 +66,6 @@ void			unlock_cs(t_philosopher *data);
 void			delay(t_philosopher *data);
 t_should_die	should_die(t_philosopher *data);
 int				should_die_wrap(t_philosopher *data, t_should_die *reason);
+void			usleep_wrap(unsigned int n);
 
 #endif
