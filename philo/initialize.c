@@ -1,4 +1,4 @@
-#include "philosophers.h"
+#include "philo.h"
 
 static void	init_chopstick_mutex(t_chopstick *chopstick)
 {

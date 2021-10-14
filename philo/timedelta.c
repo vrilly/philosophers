@@ -1,4 +1,4 @@
-#include "philosophers.h"
+#include "philo.h"
 
 int	ms_between_timestamps(struct timeval *a, struct timeval *b)
 {

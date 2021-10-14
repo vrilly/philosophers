@@ -1,4 +1,4 @@
-#include "philosophers.h"
+#include "philo.h"
 
 static int	should_die(t_philosopher *data)
 {

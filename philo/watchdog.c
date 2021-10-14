@@ -1,4 +1,4 @@
-#include "philosophers.h"
+#include "philo.h"
 
 static int	check_philo(t_philosopher *data, struct timeval cur)
 {

@@ -1,4 +1,4 @@
-#include "philosophers.h"
+#include "philo.h"
 
 static const char *msgs[] = {
 	NULL,

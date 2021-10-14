@@ -1,4 +1,4 @@
-#include "philosophers.h"
+#include "philo.h"
 
 void	usleep_wrap(unsigned int n)
 {
