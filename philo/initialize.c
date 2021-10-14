@@ -1,4 +1,16 @@
-#include "philosophers.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   initialize.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/14 17:24:22 by tjans             #+#    #+#             */
+/*   Updated: 2021/10/14 17:26:12 by tjans            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philo.h"
 
 static void	init_chopstick_mutex(t_chopstick *chopstick)
 {
@@ -12,10 +24,10 @@ void	spawn_chopsticks(t_philosophers *philosophers)
 	int				i;
 	t_chopstick		**ptr;
 
-	philosophers->chopsticks = malloc(
-			sizeof(t_chopstick *) * philosophers->args.num_of_philosophers);
+	philosophers->chopsticks = malloc(sizeof(t_chopstick *)
+			* philosophers->globals.args.num_of_philosophers);
 	i = 0;
-	while (i < philosophers->args.num_of_philosophers)
+	while (i < philosophers->globals.args.num_of_philosophers)
 	{
 		ptr = philosophers->chopsticks + i;
 		*ptr = malloc(sizeof(t_chopstick));
@@ -39,13 +51,10 @@ static void
 {
 	philo->philosopher_number = i + 1;
 	philo->times_eaten = 0;
-	philo->args = &philosophers->args;
-	philo->s_last_feeding = philosophers->start_time;
-	philo->start_time = &philosophers->start_time;
-	philo->state_lock = philosophers->state_lock;
-	philo->dead = &philosophers->dead;
+	philo->globals = &philosophers->globals;
+	philo->s_last_feeding = philosophers->globals.start_time;
 	philo->cs_left = *chopstick;
-	if (i < philosophers->args.num_of_philosophers - 1)
+	if (i < philosophers->globals.args.num_of_philosophers - 1)
 		philo->cs_right = *(chopstick + 1);
 	else
 		philo->cs_right = *philosophers->chopsticks;
@@ -59,18 +68,23 @@ void	spawn_philosophers(t_philosophers *philosophers)
 	t_philosopher	**ptr;
 	t_chopstick		**chopstick;
 
-	philosophers->entities = malloc(
-			sizeof(t_philosopher *) * philosophers->args.num_of_philosophers);
+	philosophers->entities = malloc(sizeof(t_philosopher *)
+			* philosophers->globals.args.num_of_philosophers);
 	i = 0;
 	chopstick = philosophers->chopsticks;
-	while (i < philosophers->args.num_of_philosophers)
+	while (i < philosophers->globals.args.num_of_philosophers)
 	{
 		ptr = philosophers->entities + i;
 		*ptr = malloc(sizeof(t_philosopher));
 		philo_setdata(*ptr, philosophers, i, chopstick);
+		usleep_wrap(1000);
 		pthread_create(&(*ptr)->thread, NULL, (t_start_routine)philosopher,
 			*ptr);
+		pthread_detach((*ptr)->thread);
 		i++;
 		chopstick++;
 	}
+	usleep_wrap(1000);
+	pthread_create(&philosophers->watchdog, NULL,
+		(t_start_routine)watchdog, philosophers);
 }

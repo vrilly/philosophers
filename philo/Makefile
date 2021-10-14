@@ -2,12 +2,12 @@ NAME	 = philo
 CFLAGS	 = -Wall -Wextra -Werror
 LDFLAGS	 = -lpthread
 
-SRCS	 = philosophers.c arguments.c initialize.c philosopher.c timedelta.c \
-			chopstick_lock.c delay.c should_die.c usleep_wrap.c
+SRCS	 = philo.c arguments.c initialize.c philosopher.c timedelta.c \
+			usleep_wrap.c printer.c watchdog.c
 OBJS	:= $(SRCS:.c=.o)
 OBJ_DIR	 = build
 
-$(OBJ_DIR)/%.o : %.c philosophers.h | $(OBJ_DIR)
+$(OBJ_DIR)/%.o : %.c philo.h | $(OBJ_DIR)
 	@echo "Compiling: \t" $<
 	@$(CC) $(CFLAGS) -c -o $@ $<
 

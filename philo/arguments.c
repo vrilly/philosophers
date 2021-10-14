@@ -1,4 +1,16 @@
-#include "philosophers.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arguments.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/14 17:24:17 by tjans             #+#    #+#             */
+/*   Updated: 2021/10/14 17:25:28 by tjans            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philo.h"
 
 static int	fatoi(char *str)
 {
@@ -61,9 +73,9 @@ int	get_args(t_args *args, int argc, char **argv)
 		return (1);
 	if (argc == 6)
 		i += parse_arg(argv[5], &args->times_to_eat,
-			"number_of_times_each_philosopher_must_eat");
+				"number_of_times_each_philosopher_must_eat");
 	else
-		args->times_to_eat = 0;
+		args->times_to_eat = -1;
 	i += parse_arg(argv[1], &args->num_of_philosophers,
 			"number_of_philosophers");
 	i += parse_arg(argv[2], &args->time_to_die, "time_to_die");

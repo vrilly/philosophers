@@ -1,73 +1,94 @@
-#include "philosophers.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosopher.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/14 17:23:48 by tjans             #+#    #+#             */
+/*   Updated: 2021/10/14 17:23:52 by tjans            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	get_timestamp(t_philosopher *data)
+#include "philo.h"
+
+static int	should_die(t_philosopher *data)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return (ms_between_timestamps(data->start_time, &tv));
+	pthread_mutex_lock(&data->globals->state_lock);
+	if (data->globals->dead)
+	{
+		pthread_mutex_unlock(&data->globals->state_lock);
+		return (1);
+	}
+	pthread_mutex_unlock(&data->globals->state_lock);
+	return (0);
 }
 
 static int	check_if_done(t_philosopher *data)
 {
 	data->times_eaten++;
-	if (!data->args->times_to_eat)
+	if (data->globals->args.times_to_eat == -1)
 		return (0);
-	if (data->times_eaten >= data->args->times_to_eat)
+	if (data->times_eaten >= data->globals->args.times_to_eat)
+	{
+		printer(data, DONE, NULL);
+		pthread_mutex_lock(&data->globals->state_lock);
+		data->globals->done++;
+		pthread_mutex_unlock(&data->globals->state_lock);
 		return (1);
+	}
 	return (0);
 }
 
-static t_should_die	p_eat(t_philosopher *data)
+static void	p_eat(t_philosopher *data)
 {
-	t_should_die	die_reason;
-
-	while (try_lock_cs(data, data->cs_left))
+	pthread_mutex_lock(data->cs_left->mutex);
+	if (should_die(data))
 	{
-		die_reason = should_die(data);
-		if (die_reason)
-			return (die_reason);
+		pthread_mutex_unlock(data->cs_left->mutex);
+		return ;
 	}
-	printf("[%d] %d has taken a fork\n", get_timestamp(data),
-		data->philosopher_number);
-	while (try_lock_cs(data, data->cs_right))
+	printer(data, TAKEN_FORK, NULL);
+	pthread_mutex_lock(data->cs_right->mutex);
+	if (should_die(data))
 	{
-		die_reason = should_die(data);
-		if (die_reason)
-			return (die_reason);
+		pthread_mutex_unlock(data->cs_left->mutex);
+		pthread_mutex_unlock(data->cs_right->mutex);
+		return ;
 	}
-	printf("[%d] %d has taken a fork\n", get_timestamp(data),
-		data->philosopher_number);
-	printf("[%d] %d is eating\n", get_timestamp(data),
-		data->philosopher_number);
+	printer(data, TAKEN_FORK, NULL);
+	printer(data, EATING, NULL);
+	pthread_mutex_lock(&data->globals->state_lock);
 	gettimeofday(&data->s_last_feeding, NULL);
-	usleep_wrap(data->args->time_to_eat * 1000);
-	unlock_cs(data);
-	return (0);
+	pthread_mutex_unlock(&data->globals->state_lock);
+	usleep_wrap(data->globals->args.time_to_eat * 1000);
+	pthread_mutex_unlock(data->cs_left->mutex);
+	pthread_mutex_unlock(data->cs_right->mutex);
 }
 
 void	*philosopher(t_philosopher *data)
 {
-	t_should_die	die_reason;
-
+	if (data->globals->args.num_of_philosophers == 1)
+	{
+		printer(data, THINKING, NULL);
+		usleep_wrap((data->globals->args.time_to_die + 5) * 1000);
+		return (NULL);
+	}
 	while (1)
 	{
-		die_reason = p_eat(data);
-		if (die_reason || should_die_wrap(data, &die_reason))
+		p_eat(data);
+		if (should_die(data))
 			break ;
 		if (check_if_done(data))
 			return (NULL);
-		printf("[%d] %d is sleeping\n", get_timestamp(data),
-			data->philosopher_number);
-		usleep_wrap(data->args->time_to_sleep * 1000);
-		if (should_die_wrap(data, &die_reason))
+		printer(data, SLEEPING, NULL);
+		usleep_wrap(data->globals->args.time_to_sleep * 1000);
+		if (should_die(data))
 			break ;
-		printf("[%d] %d is thinking\n", get_timestamp(data),
-			data->philosopher_number);
-		delay(data);
+		printer(data, THINKING, NULL);
 	}
-	if (die_reason == STARVED)
-		printf("[%d] %d died\n", get_timestamp(data),
-			data->philosopher_number);
 	return (NULL);
 }
