@@ -1,5 +1,7 @@
 #include "philosophers.h"
 
+
+// TODO: Remove this shit or fix it
 void	delay(t_philosopher *data)
 {
 	struct timeval	cur;
