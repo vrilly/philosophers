@@ -1,19 +1,5 @@
 #include "philosophers.h"
 
-static void	join_threads(t_philosophers *philosophers)
-{
-	int				i;
-	t_philosopher	*p;
-
-	i = 0;
-	while (i < philosophers->globals.args.num_of_philosophers)
-	{
-		p = *(philosophers->entities + i);
-		pthread_join(p->thread, NULL);
-		i++;
-	}
-}
-
 static void	cleanup(t_philosophers *philo)
 {
 	int	i;
@@ -46,7 +32,12 @@ int	main(int argc, char **argv)
 	pthread_mutex_init(&philosophers.globals.state_lock, NULL);
 	spawn_chopsticks(&philosophers);
 	spawn_philosophers(&philosophers);
-	join_threads(&philosophers);
+	pthread_join(philosophers.watchdog, NULL);
+	if (philosophers.globals.dead)
+		printf("\nExecution stopped due to a death :(\n");
+	else
+		printf("\nExecution stopped after everyone ate enough\n%s\n", 
+				"May the philosophers live, be prosperous and be healthy!");
 	cleanup(&philosophers);
 	return (0);
 }

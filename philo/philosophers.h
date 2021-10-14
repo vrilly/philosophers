@@ -39,6 +39,7 @@ typedef struct s_global_vars
 	struct timeval	start_time;
 	pthread_mutex_t	state_lock;
 	int				dead;
+	int				done;
 }	t_global_vars;
 
 typedef struct s_philosopher

@@ -67,6 +67,7 @@ void	spawn_philosophers(t_philosophers *philosophers)
 		philo_setdata(*ptr, philosophers, i, chopstick);
 		pthread_create(&(*ptr)->thread, NULL, (t_start_routine)philosopher,
 			*ptr);
+		pthread_detach((*ptr)->thread);
 		i++;
 		chopstick++;
 	}

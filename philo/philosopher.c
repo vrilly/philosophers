@@ -19,11 +19,14 @@ static int	should_die(t_philosopher *data)
 static int	check_if_done(t_philosopher *data)
 {
 	data->times_eaten++;
-	if (!data->globals->args.times_to_eat)
+	if (data->globals->args.times_to_eat == -1)
 		return (0);
 	if (data->times_eaten >= data->globals->args.times_to_eat)
 	{
 		printer(data, DONE, NULL);
+		pthread_mutex_lock(&data->globals->state_lock);
+		data->globals->done++;
+		pthread_mutex_unlock(&data->globals->state_lock);
 		return (1);
 	}
 	return (0);
