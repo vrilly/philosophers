@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/14 17:24:24 by tjans             #+#    #+#             */
+/*   Updated: 2021/10/14 17:26:39 by tjans            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static void	cleanup(t_philosophers *philo)
@@ -36,8 +48,8 @@ int	main(int argc, char **argv)
 	if (philosophers.globals.dead)
 		printf("\nExecution stopped due to a death :(\n");
 	else
-		printf("\nExecution stopped after everyone ate enough\n%s\n", 
-				"May the philosophers live, be prosperous and be healthy!");
+		printf("\nExecution stopped after everyone ate enough\n%s\n",
+			"May the philosophers live, be prosperous and be healthy!");
 	cleanup(&philosophers);
 	return (0);
 }

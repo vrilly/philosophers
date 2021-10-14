@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   watchdog.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/14 17:24:41 by tjans             #+#    #+#             */
+/*   Updated: 2021/10/14 17:28:21 by tjans            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static int	check_philo(t_philosopher *data, struct timeval cur)
@@ -33,7 +45,8 @@ void	*watchdog(t_philosophers *philos)
 				break ;
 			i++;
 		}
-		if (philos->globals.dead || philos->globals.done == philos->globals.args.num_of_philosophers)
+		if (philos->globals.dead || philos->globals.done
+			== philos->globals.args.num_of_philosophers)
 			break ;
 		pthread_mutex_unlock(&philos->globals.state_lock);
 		usleep(1000);

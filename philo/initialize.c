@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   initialize.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/14 17:24:22 by tjans             #+#    #+#             */
+/*   Updated: 2021/10/14 17:26:12 by tjans            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static void	init_chopstick_mutex(t_chopstick *chopstick)
@@ -12,8 +24,8 @@ void	spawn_chopsticks(t_philosophers *philosophers)
 	int				i;
 	t_chopstick		**ptr;
 
-	philosophers->chopsticks = malloc(
-			sizeof(t_chopstick *) * philosophers->globals.args.num_of_philosophers);
+	philosophers->chopsticks = malloc(sizeof(t_chopstick *)
+			* philosophers->globals.args.num_of_philosophers);
 	i = 0;
 	while (i < philosophers->globals.args.num_of_philosophers)
 	{
@@ -73,5 +85,6 @@ void	spawn_philosophers(t_philosophers *philosophers)
 		chopstick++;
 	}
 	usleep_wrap(1000);
-	pthread_create(&philosophers->watchdog, NULL, (t_start_routine)watchdog, philosophers);
+	pthread_create(&philosophers->watchdog, NULL,
+		(t_start_routine)watchdog, philosophers);
 }
