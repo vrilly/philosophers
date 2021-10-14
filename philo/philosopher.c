@@ -53,7 +53,6 @@ void	*philosopher(t_philosopher *data)
 			break ;
 		printf("[%d] %d is thinking\n", get_timestamp(data),
 			data->philosopher_number);
-		delay(data);
 	}
 	if (die_reason == STARVED)
 		printf("[%d] %d died\n", get_timestamp(data),
