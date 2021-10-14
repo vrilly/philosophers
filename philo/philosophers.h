@@ -7,13 +7,6 @@
 # include <pthread.h>
 # include <string.h>
 
-typedef enum e_should_die
-{
-	ALIVE,
-	STARVED,
-	BUDDY_DIED
-}	t_should_die;
-
 typedef enum e_printer_msg
 {
 	CUSTOM,
@@ -64,6 +57,7 @@ typedef struct s_philosophers
 	t_global_vars	globals;
 	t_chopstick		**chopsticks;
 	t_philosopher	**entities;
+	pthread_t		watchdog;
 }	t_philosophers;
 
 typedef void*	(*t_start_routine)(void *);
@@ -73,9 +67,8 @@ void			spawn_chopsticks(t_philosophers *philosophers);
 void			spawn_philosophers(t_philosophers *philosophers);
 void			*philosopher(t_philosopher *data);
 int				ms_between_timestamps(struct timeval *a, struct timeval *b);
-t_should_die	should_die(t_philosopher *data);
-int				should_die_wrap(t_philosopher *data, t_should_die *reason);
 void			usleep_wrap(unsigned int n);
 void			printer(t_philosopher *data, t_printer_msg msg, char *custom_msg);
+void			*watchdog(t_philosophers *philos);
 
 #endif

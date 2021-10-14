@@ -70,4 +70,6 @@ void	spawn_philosophers(t_philosophers *philosophers)
 		i++;
 		chopstick++;
 	}
+	usleep_wrap(1000);
+	pthread_create(&philosophers->watchdog, NULL, (t_start_routine)watchdog, philosophers);
 }
