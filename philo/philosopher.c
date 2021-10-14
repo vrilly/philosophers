@@ -20,29 +20,18 @@ static int	check_if_done(t_philosopher *data)
 
 static t_should_die	p_eat(t_philosopher *data)
 {
-	t_should_die	die_reason;
-
-	while (try_lock_cs(data, data->cs_left))
-	{
-		die_reason = should_die(data);
-		if (die_reason)
-			return (die_reason);
-	}
+	pthread_mutex_lock(data->cs_left->mutex);
 	printf("[%d] %d has taken a fork\n", get_timestamp(data),
 		data->philosopher_number);
-	while (try_lock_cs(data, data->cs_right))
-	{
-		die_reason = should_die(data);
-		if (die_reason)
-			return (die_reason);
-	}
+	pthread_mutex_lock(data->cs_right->mutex);
 	printf("[%d] %d has taken a fork\n", get_timestamp(data),
 		data->philosopher_number);
 	printf("[%d] %d is eating\n", get_timestamp(data),
 		data->philosopher_number);
 	gettimeofday(&data->s_last_feeding, NULL);
 	usleep_wrap(data->args->time_to_eat * 1000);
-	unlock_cs(data);
+	pthread_mutex_unlock(data->cs_left->mutex);
+	pthread_mutex_unlock(data->cs_right->mutex);
 	return (0);
 }
 
