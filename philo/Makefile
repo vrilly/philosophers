@@ -1,5 +1,5 @@
 NAME	 = philo
-CFLAGS	 = -Wall -Wextra -Werror 
+CFLAGS	 = -Wall -Wextra -Werror
 LDFLAGS	 = -lpthread
 
 SRCS	 = philo.c arguments.c initialize.c philosopher.c timedelta.c \
