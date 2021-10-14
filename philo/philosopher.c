@@ -49,7 +49,9 @@ static void	p_eat(t_philosopher *data)
 	}
 	printer(data, TAKEN_FORK, NULL);
 	printer(data, EATING, NULL);
+	pthread_mutex_lock(&data->globals->state_lock);
 	gettimeofday(&data->s_last_feeding, NULL);
+	pthread_mutex_unlock(&data->globals->state_lock);
 	usleep_wrap(data->globals->args.time_to_eat * 1000);
 	pthread_mutex_unlock(data->cs_left->mutex);
 	pthread_mutex_unlock(data->cs_right->mutex);
