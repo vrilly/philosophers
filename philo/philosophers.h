@@ -39,29 +39,31 @@ typedef struct s_chopstick
 	pthread_mutex_t	*mutex;
 }	t_chopstick;
 
+typedef struct s_global_vars
+{
+	t_args			args;
+	struct timeval	start_time;
+	pthread_mutex_t	state_lock;
+	int				dead;
+}	t_global_vars;
+
 typedef struct s_philosopher
 {
 	int				philosopher_number;
 	int				times_eaten;
-	struct timeval	*start_time;
 	struct timeval	s_last_feeding;
 	pthread_t		thread;
 	t_chopstick		*cs_left;
 	t_chopstick		*cs_right;
 
-	t_args			*args;
-	pthread_mutex_t	*state_lock;
-	int				*dead;
+	t_global_vars	*globals;
 }	t_philosopher;
 
 typedef struct s_philosophers
 {
-	pthread_mutex_t	*state_lock;
-	int				dead;
+	t_global_vars	globals;
 	t_chopstick		**chopsticks;
 	t_philosopher	**entities;
-	t_args			args;
-	struct timeval	start_time;
 }	t_philosophers;
 
 typedef void*	(*t_start_routine)(void *);

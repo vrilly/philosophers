@@ -13,9 +13,9 @@ void	spawn_chopsticks(t_philosophers *philosophers)
 	t_chopstick		**ptr;
 
 	philosophers->chopsticks = malloc(
-			sizeof(t_chopstick *) * philosophers->args.num_of_philosophers);
+			sizeof(t_chopstick *) * philosophers->globals.args.num_of_philosophers);
 	i = 0;
-	while (i < philosophers->args.num_of_philosophers)
+	while (i < philosophers->globals.args.num_of_philosophers)
 	{
 		ptr = philosophers->chopsticks + i;
 		*ptr = malloc(sizeof(t_chopstick));
@@ -39,13 +39,10 @@ static void
 {
 	philo->philosopher_number = i + 1;
 	philo->times_eaten = 0;
-	philo->args = &philosophers->args;
-	philo->s_last_feeding = philosophers->start_time;
-	philo->start_time = &philosophers->start_time;
-	philo->state_lock = philosophers->state_lock;
-	philo->dead = &philosophers->dead;
+	philo->globals = &philosophers->globals;
+	philo->s_last_feeding = philosophers->globals.start_time;
 	philo->cs_left = *chopstick;
-	if (i < philosophers->args.num_of_philosophers - 1)
+	if (i < philosophers->globals.args.num_of_philosophers - 1)
 		philo->cs_right = *(chopstick + 1);
 	else
 		philo->cs_right = *philosophers->chopsticks;
@@ -59,11 +56,11 @@ void	spawn_philosophers(t_philosophers *philosophers)
 	t_philosopher	**ptr;
 	t_chopstick		**chopstick;
 
-	philosophers->entities = malloc(
-			sizeof(t_philosopher *) * philosophers->args.num_of_philosophers);
+	philosophers->entities = malloc(sizeof(t_philosopher *)
+			* philosophers->globals.args.num_of_philosophers);
 	i = 0;
 	chopstick = philosophers->chopsticks;
-	while (i < philosophers->args.num_of_philosophers)
+	while (i < philosophers->globals.args.num_of_philosophers)
 	{
 		ptr = philosophers->entities + i;
 		*ptr = malloc(sizeof(t_philosopher));

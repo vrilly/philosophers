@@ -3,9 +3,9 @@
 static int	check_if_done(t_philosopher *data)
 {
 	data->times_eaten++;
-	if (!data->args->times_to_eat)
+	if (!data->globals->args.times_to_eat)
 		return (0);
-	if (data->times_eaten >= data->args->times_to_eat)
+	if (data->times_eaten >= data->globals->args.times_to_eat)
 		return (1);
 	return (0);
 }
@@ -18,7 +18,7 @@ static t_should_die	p_eat(t_philosopher *data)
 	printer(data, TAKEN_FORK, NULL);
 	printer(data, EATING, NULL);
 	gettimeofday(&data->s_last_feeding, NULL);
-	usleep_wrap(data->args->time_to_eat * 1000);
+	usleep_wrap(data->globals->args.time_to_eat * 1000);
 	pthread_mutex_unlock(data->cs_left->mutex);
 	pthread_mutex_unlock(data->cs_right->mutex);
 	return (0);
@@ -36,7 +36,7 @@ void	*philosopher(t_philosopher *data)
 		if (check_if_done(data))
 			return (NULL);
 		printer(data, SLEEPING, NULL);
-		usleep_wrap(data->args->time_to_sleep * 1000);
+		usleep_wrap(data->globals->args.time_to_sleep * 1000);
 		if (should_die_wrap(data, &die_reason))
 			break ;
 		printer(data, THINKING, NULL);

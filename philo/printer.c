@@ -14,7 +14,7 @@ static int	get_timestamp(t_philosopher *data)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return (ms_between_timestamps(data->start_time, &tv));
+	return (ms_between_timestamps(&data->globals->start_time, &tv));
 }
 
 void	printer(t_philosopher *data, t_printer_msg msg, char *custom_msg)
