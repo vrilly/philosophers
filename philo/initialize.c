@@ -65,6 +65,7 @@ void	spawn_philosophers(t_philosophers *philosophers)
 		ptr = philosophers->entities + i;
 		*ptr = malloc(sizeof(t_philosopher));
 		philo_setdata(*ptr, philosophers, i, chopstick);
+		usleep_wrap(1000);
 		pthread_create(&(*ptr)->thread, NULL, (t_start_routine)philosopher,
 			*ptr);
 		pthread_detach((*ptr)->thread);

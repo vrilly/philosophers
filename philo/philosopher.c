@@ -15,7 +15,6 @@ static int	should_die(t_philosopher *data)
 	return (0);
 }
 
-
 static int	check_if_done(t_philosopher *data)
 {
 	data->times_eaten++;
@@ -61,8 +60,7 @@ void	*philosopher(t_philosopher *data)
 	if (data->globals->args.num_of_philosophers == 1)
 	{
 		printer(data, THINKING, NULL);
-		usleep_wrap(data->globals->args.time_to_die * 1000);
-		printer(data, DIED, NULL);
+		usleep_wrap((data->globals->args.time_to_die + 5) * 1000);
 		return (NULL);
 	}
 	while (1)
