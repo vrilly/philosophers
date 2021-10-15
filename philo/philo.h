@@ -6,7 +6,7 @@
 /*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 17:24:28 by tjans             #+#    #+#             */
-/*   Updated: 2021/10/15 12:35:53 by tjans            ###   ########.fr       */
+/*   Updated: 2021/10/15 14:40:14 by tjans            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_args
 
 typedef struct s_chopstick
 {
-	int				reserved;
+	int				owner;
 	pthread_mutex_t	*mutex;
 }	t_chopstick;
 
@@ -86,5 +86,8 @@ void			usleep_wrap(unsigned int n);
 void			printer(t_philosopher *data, t_printer_msg msg,
 					char *custom_msg);
 void			*watchdog(t_philosophers *philos);
+int				p_eat(t_philosopher *data);
+int				check_if_done(t_philosopher *data);
+int				should_die(t_philosopher *data);
 
 #endif

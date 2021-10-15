@@ -6,7 +6,7 @@
 /*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 17:24:22 by tjans             #+#    #+#             */
-/*   Updated: 2021/10/15 12:41:16 by tjans            ###   ########.fr       */
+/*   Updated: 2021/10/15 14:38:44 by tjans            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	init_chopstick_mutex(t_chopstick *chopstick)
 {
-	chopstick->reserved = 0;
+	chopstick->owner = 0;
 	chopstick->mutex = malloc(sizeof(pthread_mutex_t));
 	if (!chopstick->mutex || pthread_mutex_init(chopstick->mutex, NULL))
 		return (1);

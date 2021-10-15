@@ -6,7 +6,7 @@
 /*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 17:24:34 by tjans             #+#    #+#             */
-/*   Updated: 2021/10/15 13:04:34 by tjans            ###   ########.fr       */
+/*   Updated: 2021/10/15 14:53:37 by tjans            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void	printer(t_philosopher *data, t_printer_msg msg, char *custom_msg)
 {
 	char	*p;
 
-	pthread_mutex_lock(&data->globals->state_lock);
+	if (pthread_mutex_lock(&data->globals->state_lock))
+		return ;
 	if (msg == CUSTOM)
 		p = custom_msg;
 	else
