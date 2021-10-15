@@ -6,7 +6,7 @@
 /*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 17:24:34 by tjans             #+#    #+#             */
-/*   Updated: 2021/10/14 17:28:08 by tjans            ###   ########.fr       */
+/*   Updated: 2021/10/15 13:04:34 by tjans            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static int	get_timestamp(t_philosopher *data)
 {
 	struct timeval	tv;
 
-	gettimeofday(&tv, NULL);
+	if (gettimeofday(&tv, NULL))
+		return (-1);
 	return (ms_between_timestamps(&data->globals->start_time, &tv));
 }
 

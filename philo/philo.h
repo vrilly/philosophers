@@ -6,7 +6,7 @@
 /*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 17:24:28 by tjans             #+#    #+#             */
-/*   Updated: 2021/10/14 17:26:59 by tjans            ###   ########.fr       */
+/*   Updated: 2021/10/15 12:35:53 by tjans            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,14 @@ typedef struct s_philosophers
 	t_chopstick		**chopsticks;
 	t_philosopher	**entities;
 	pthread_t		watchdog;
+	char			*crit_error;
 }	t_philosophers;
 
 typedef void*	(*t_start_routine)(void *);
 
 int				get_args(t_args *args, int argc, char **argv);
-void			spawn_chopsticks(t_philosophers *philosophers);
-void			spawn_philosophers(t_philosophers *philosophers);
+int				spawn_chopsticks(t_philosophers *philosophers);
+int				spawn_philosophers(t_philosophers *philosophers);
 void			*philosopher(t_philosopher *data);
 int				ms_between_timestamps(struct timeval *a, struct timeval *b);
 void			usleep_wrap(unsigned int n);

@@ -2,8 +2,8 @@ NAME	 = philo
 CFLAGS	 = -Wall -Wextra -Werror
 LDFLAGS	 = -lpthread
 
-SRCS	 = philo.c arguments.c initialize.c philosopher.c timedelta.c \
-			usleep_wrap.c printer.c watchdog.c
+SRCS	 = philo.c arguments.c init_philo.c init_chop.c philosopher.c \
+			timedelta.c usleep_wrap.c printer.c watchdog.c
 OBJS	:= $(SRCS:.c=.o)
 OBJ_DIR	 = build
 

@@ -1,40 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   initialize.c                                       :+:      :+:    :+:   */
+/*   init_philo.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/14 17:24:22 by tjans             #+#    #+#             */
-/*   Updated: 2021/10/14 17:26:12 by tjans            ###   ########.fr       */
+/*   Created: 2021/10/15 12:40:23 by tjans             #+#    #+#             */
+/*   Updated: 2021/10/15 12:59:00 by tjans            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-static void	init_chopstick_mutex(t_chopstick *chopstick)
-{
-	chopstick->reserved = 0;
-	chopstick->mutex = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(chopstick->mutex, NULL);
-}
-
-void	spawn_chopsticks(t_philosophers *philosophers)
-{
-	int				i;
-	t_chopstick		**ptr;
-
-	philosophers->chopsticks = malloc(sizeof(t_chopstick *)
-			* philosophers->globals.args.num_of_philosophers);
-	i = 0;
-	while (i < philosophers->globals.args.num_of_philosophers)
-	{
-		ptr = philosophers->chopsticks + i;
-		*ptr = malloc(sizeof(t_chopstick));
-		init_chopstick_mutex(*ptr);
-		i++;
-	}
-}
 
 static void	swap_chopsticks(t_philosopher *philo)
 {
@@ -62,29 +38,42 @@ static void
 		swap_chopsticks(philo);
 }
 
-void	spawn_philosophers(t_philosophers *philosophers)
+static int	philo_init(t_philosophers *philos, t_chopstick **c, int i)
+{
+	t_philosopher	**p;
+
+	p = philos->entities + i;
+	*p = malloc(sizeof(t_philosopher));
+	if (!*p)
+		return (1);
+	philo_setdata(*p, philos, i, c);
+	usleep_wrap(1000);
+	if (pthread_create(&(*p)->thread, NULL, (t_start_routine)philosopher, *p)
+		|| pthread_detach((*p)->thread))
+		return (1);
+	return (0);
+}
+
+int	spawn_philosophers(t_philosophers *philosophers)
 {
 	int				i;
-	t_philosopher	**ptr;
 	t_chopstick		**chopstick;
 
+	philosophers->crit_error = "spawn_philosophers";
 	philosophers->entities = malloc(sizeof(t_philosopher *)
 			* philosophers->globals.args.num_of_philosophers);
+	if (!philosophers->entities)
+		return (1);
 	i = 0;
 	chopstick = philosophers->chopsticks;
 	while (i < philosophers->globals.args.num_of_philosophers)
 	{
-		ptr = philosophers->entities + i;
-		*ptr = malloc(sizeof(t_philosopher));
-		philo_setdata(*ptr, philosophers, i, chopstick);
-		usleep_wrap(1000);
-		pthread_create(&(*ptr)->thread, NULL, (t_start_routine)philosopher,
-			*ptr);
-		pthread_detach((*ptr)->thread);
+		if (philo_init(philosophers, chopstick, i))
+			return (1);
 		i++;
 		chopstick++;
 	}
 	usleep_wrap(1000);
-	pthread_create(&philosophers->watchdog, NULL,
-		(t_start_routine)watchdog, philosophers);
+	return (pthread_create(&philosophers->watchdog, NULL,
+			(t_start_routine)watchdog, philosophers));
 }

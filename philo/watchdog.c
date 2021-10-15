@@ -6,7 +6,7 @@
 /*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 17:24:41 by tjans             #+#    #+#             */
-/*   Updated: 2021/10/14 17:28:21 by tjans            ###   ########.fr       */
+/*   Updated: 2021/10/15 13:05:52 by tjans            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	*watchdog(t_philosophers *philos)
 	{
 		pthread_mutex_lock(&philos->globals.state_lock);
 		i = 0;
-		gettimeofday(&cur, NULL);
+		if (gettimeofday(&cur, NULL))
+			return (NULL);
 		while (i < philos->globals.args.num_of_philosophers)
 		{
 			if (check_philo(philos->entities[i], cur))
