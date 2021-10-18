@@ -6,11 +6,37 @@
 /*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 17:23:48 by tjans             #+#    #+#             */
-/*   Updated: 2021/10/15 14:38:14 by tjans            ###   ########.fr       */
+/*   Updated: 2021/10/18 22:07:32 by tjans            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	philo_loop(t_philosopher *data)
+{
+	int	ret;
+
+	while (1)
+	{
+		ret = p_eat(data);
+		if (ret)
+			break ;
+		ret = should_die(data);
+		if (ret)
+			break ;
+		if (check_if_done(data))
+			break ;
+		printer(data, SLEEPING, NULL);
+		usleep_wrap(data->globals->args.time_to_sleep * 1000);
+		ret = should_die(data);
+		if (ret)
+			break ;
+		printer(data, THINKING, NULL);
+	}
+	if (ret == -1)
+			printf("Critical error happened in philo %d.\n",
+				data->philosopher_number);
+}
 
 void	*philosopher(t_philosopher *data)
 {
@@ -20,18 +46,6 @@ void	*philosopher(t_philosopher *data)
 		usleep_wrap((data->globals->args.time_to_die + 5) * 1000);
 		return (NULL);
 	}
-	while (1)
-	{
-		p_eat(data);
-		if (should_die(data))
-			break ;
-		if (check_if_done(data))
-			return (NULL);
-		printer(data, SLEEPING, NULL);
-		usleep_wrap(data->globals->args.time_to_sleep * 1000);
-		if (should_die(data))
-			break ;
-		printer(data, THINKING, NULL);
-	}
+	philo_loop(data);
 	return (NULL);
 }

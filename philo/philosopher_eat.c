@@ -6,7 +6,7 @@
 /*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 13:59:56 by tjans             #+#    #+#             */
-/*   Updated: 2021/10/15 14:53:05 by tjans            ###   ########.fr       */
+/*   Updated: 2021/10/18 22:05:48 by tjans            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ static int	eat_and_release_chop(t_philosopher *data)
 int	p_eat(t_philosopher *data)
 {
 	if (lock_chop(data, data->cs_left))
-		return (1);
-	if (should_die(data))
 		return (-1);
+	if (should_die(data))
+		return (1);
 	if (lock_chop(data, data->cs_right))
-		return (1);
-	if (should_die(data))
 		return (-1);
+	if (should_die(data))
+		return (1);
 	return (eat_and_release_chop(data));
 }
