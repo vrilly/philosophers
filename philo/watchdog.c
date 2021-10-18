@@ -6,11 +6,17 @@
 /*   By: tjans <tnjans@outlook.de>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 17:24:41 by tjans             #+#    #+#             */
-/*   Updated: 2021/10/18 22:12:20 by tjans            ###   ########.fr       */
+/*   Updated: 2021/10/18 22:15:34 by tjans            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static void	*prt_crt_err(void)
+{
+	printf("Critical error in watchdog!\n");
+	return (NULL);
+}
 
 static int	check_philo(t_philosopher *data, struct timeval cur)
 {
@@ -29,12 +35,6 @@ static int	check_philo(t_philosopher *data, struct timeval cur)
 		return (1);
 	}
 	return (0);
-}
-
-static void	*prt_crt_err(void)
-{
-	printf("Critical error in watchdog!\n");
-	return (NULL);
 }
 
 void	*watchdog(t_philosophers *philos)
